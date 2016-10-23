@@ -7,11 +7,28 @@ class Unique(object):
         # Например: ignore_case = True, Aбв и АБВ разные строки
         #           ignore_case = False, Aбв и АБВ одинаковые строки, одна из них удалится
         # По-умолчанию ignore_case = False
-        pass
-
+        if (type(items))==list:
+            self.items=iter(items)
+        else:
+             self.items=items
+        self.index=0
+        self.ignore_case=kwargs.get('ignore_case',False)
+        self.was=[]
     def __next__(self):
-        # Нужно реализовать __next__    
-        pass
-
+        # Нужно реализовать __next__
+        for i in self.items:
+            if (self.ignore_case==True and type(i)==str):
+                if (self.was.count(i.lower())==0):
+                    self.was.append(i.lower())
+                    return i
+                else:
+                    continue
+            else:
+                if (self.was.count(i)==0):
+                    self.was.append(i)
+                    return i
+                else:
+                    continue
+        raise StopIteration
     def __iter__(self):
         return self
